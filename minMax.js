@@ -23,9 +23,13 @@ class MinMax {
 
   min_max_search(problem, fringe){
 
+    print("Min Max Search. Fringe lenght: ", fringe.lenght);
     var move = null;
 
+
     fringe.forEach((item, i) => {
+
+      print("Iterazione: ", i);
       console.log("fringe: ", item);
       var childState = problem.result(item, problem.player_turn);
       console.log("nuovo stato: ", childState);
