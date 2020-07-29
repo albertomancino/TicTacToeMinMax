@@ -1,0 +1,1 @@
+capire perché non va la funzione result quando chiamata dal min max
