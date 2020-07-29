@@ -11,7 +11,7 @@ class MinMax {
   }
 
   nextMove(problem){
-
+    print("nextMove chiamata");
     var move = null;
 
     // all possibile actions
@@ -30,7 +30,6 @@ class MinMax {
       var childState = problem.result(item, problem.player_turn);
       console.log("nuovo stato: ", childState);
     });
-
 
     return move;
   }
