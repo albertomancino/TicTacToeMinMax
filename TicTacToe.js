@@ -3,10 +3,10 @@ class Tris {
   constructor(canv_ctr, tris_cell_dim) {
 
     this.state = {
-      // default table is empty
-      table:  [
-        [0, 0, 0],
-        [0, 0, 0],
+      // default board is empty
+      board:  [
+        [1, 0, 0],
+        [0, 2, 0],
         [0, 0, 0]
       ],
 
@@ -58,11 +58,11 @@ class Tris {
     }
   }
   // switch player turn
-  change_turn() {
-    if (this.player_turn == 'X') {
-      this.player_turn = 'O';
+  change_turn(state) {
+    if (state.player_turn == 'X') {
+      state.player_turn = 'O';
     } else {
-      this.player_turn = 'X';
+      state.player_turn = 'X';
     }
   }
   // return the row or col index given the x or y coordinate and offset
@@ -86,11 +86,11 @@ class Tris {
     let col = 0;
   }
 
-  action(state) {
+  action(board) {
     let actions = []
     for (let row = 0; row < 3; row++) {
       for (let col = 0; col < 3; col++) {
-        if (state[row][col] == 0) {
+        if (board[row][col] == 0) {
           append(actions, [row, col]);
         }
       }
@@ -101,14 +101,11 @@ class Tris {
   result(action, player) {
     let row = action[0];
     let col = action[1];
-    // todo remove create a copy of the actual state
-    //var newState = this.state.map(x => x.slice())
 
-    var newState = new Tris();
-    print(newState, typeof newState, typeof this);
-    newState.state[row][col] = this.player_id(player);
-    newState.change_turn();
-
+    var newState = Object.assign({}, this.state);
+    newState.board[row][col] = this.player_id(player);
+    this.change_turn(newState);
+    print("nuovo stato: ", newState);
     return newState;
   }
 
@@ -128,10 +125,11 @@ class Tris {
   }
 
   draw_state() {
+    var board = this.state.board;
     for (let row = 0; row < 3; row++) {
       for (let col = 0; col < 3; col++) {
-        if (this.state[row][col] != 0) {
-          this.draw_player(this.state[row][col], row, col);
+        if (this.state.board[row][col] != 0) {
+          this.draw_player(this.state.board[row][col], row, col);
         }
       }
     }

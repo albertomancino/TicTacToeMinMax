@@ -25,7 +25,7 @@ function draw() {
   // if game is not in the final state
   if (game.final != 1) {
     // AI moves
-    if (game.player_turn == 'O') {
+    if (game.state.player_turn == 'O') {
 
       if (reasoning == false){
         reasoning = true;
@@ -53,22 +53,21 @@ function draw() {
 }
 // function called when the mouse is pressed
 function mouseClicked() {
-
   // mouse click must be considered only under specific conditions:
   // - it's user turn
   // - game is not ended
-  if (game.player_turn == 'X' && game.final != 1) {
+  if (game.state.player_turn == 'X' && game.final != 1) {
     let boardX = canv_ctr - 150;
     let boardY = canv_ctr - 150;
     let row = game.cell_interpreter(mouseY, boardY);
     let col = game.cell_interpreter(mouseX, boardX);
     // if mouse position has been interpreted as in a cell
     if(row != null && col != null){
-      if (game.state[row][col] == 0) {
+      if (game.state.board[row][col] == 0) {
         // load the new state in the game
-        game = game.result([row, col], game.player_turn);
+        game.state = game.result([row, col], game.state.player_turn);
         // change game player turn - form player to AI
-        if (game.check_final_state(game.state)) {
+        if (game.check_final_state(game.state.board)) {
           game.final = 1;
         }
       }
