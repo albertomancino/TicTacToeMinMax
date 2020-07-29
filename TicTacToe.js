@@ -1,13 +1,19 @@
 class Tris {
 
   constructor(canv_ctr, tris_cell_dim) {
-    this.state = [
-      [0, 0, 0],
-      [0, 0, 0],
-      [0, 0, 0]
-    ];
-    // first player is X by default
-    this.player_turn = 'X';
+
+    this.state = {
+      // default table is empty
+      table:  [
+        [0, 0, 0],
+        [0, 0, 0],
+        [0, 0, 0]
+      ],
+
+      // first player is X by default
+      player_turn: 'X'
+    };
+
     this.canvas_dim = canvas_dim;
     // canvas center coordinate
     this.canv_ctr = canvas_dim / 2;
@@ -95,10 +101,14 @@ class Tris {
   result(action, player) {
     let row = action[0];
     let col = action[1];
-    // create a copy of the actual state
-    var newState = this.state.map(x => x.slice())
+    // todo remove create a copy of the actual state
+    //var newState = this.state.map(x => x.slice())
 
-    newState[row][col] = this.player_id(player);
+    var newState = new Tris();
+    print(newState, typeof newState, typeof this);
+    newState.state[row][col] = this.player_id(player);
+    newState.change_turn();
+
     return newState;
   }
 

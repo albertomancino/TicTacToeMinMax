@@ -3,6 +3,7 @@ let canvas_dim = 400;
 let canv_ctr = canvas_dim / 2;
 let tris_cell_dim = 100;
 var button;
+var reasoning = false;
 
 
 
@@ -25,7 +26,12 @@ function draw() {
   if (game.final != 1) {
     // AI moves
     if (game.player_turn == 'O') {
-      AI.nextMove(game);
+
+      if (reasoning == false){
+        reasoning = true;
+        var move = AI.nextMove(game);
+      }
+
 
       /*// random choice
       actions = game.action(game.state);
@@ -60,9 +66,8 @@ function mouseClicked() {
     if(row != null && col != null){
       if (game.state[row][col] == 0) {
         // load the new state in the game
-        game.state = game.result([row, col], game.player_turn);
+        game = game.result([row, col], game.player_turn);
         // change game player turn - form player to AI
-        game.change_turn();
         if (game.check_final_state(game.state)) {
           game.final = 1;
         }
