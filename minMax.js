@@ -10,32 +10,53 @@ class MinMax {
       this.depth = depth;
   }
 
-  nextMove(problem){
+  nextMove(agent){
     print("nextMove chiamata");
-    var move = null;
 
     // all possibile actions
-    let fringe = problem.action(problem.state);
-    this.min_max_search(problem, fringe);
+    let fringe = agent.action(agent.state);
+    var move = this.min_max_search(agent, fringe);
 
     return move;
   }
 
-  min_max_search(problem, fringe){
-
+  min_max_search(agent, fringe){
+    print("-----------------------------------------------")
     print("Min Max Search. Fringe lenght: ", fringe.length);
-    var move = null;
+    print("Board pre min max search: ", agent.state.board[0],agent.state.board[1],agent.state.board[2]);
 
-    fringe.forEach((item, i) => {
+    var bestMove = null;
 
-      var childState = problem.result(item, problem.player_turn);
+    fringe.forEach((move, i) => {
+      print("compute evolution with move ", move);
+      print("and turn: ", agent.state.player_turn);
+      print("and board: ", agent.state.board[0],agent.state.board[1],agent.state.board[2]);
+      // compute the evolution of the state
+      var childState = agent.result(move, agent.state.player_turn);
+
+      console.log("nuovo stato: ",move, "\n", childState.board[0],childState.board[1],childState.board[2]);
+      console.log("nuovo turno: ", childState.player_turn);
+      console.log("stato dell'agent: ",move, "\n", agent.state.board[0],agent.state.board[1],agent.state.board[2]);
+
+      // check if the new state is a final state
+      //if(agent.check_final_state(childState) != 0){
+        //var heuristic = agent.heuristic(childState,'O');
+        //print('Euristica: ', heuristic);
+      //}
+      // if is a final state compute heuristic
+
+      // if is not a final state continue exploring state space
+
+
+
+
       //print("Iterazione: ", i);
-      //console.log("fringe: ", item);
-      //console.log("nuovo stato: ", childState);
-      
+      //console.log("fringe: ", move);
 
+      bestMove = move;
     });
 
-    return move;
+    console.log("ritornato: ", bestMove);
+    return bestMove;
   }
 }

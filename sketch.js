@@ -4,7 +4,7 @@ let canv_ctr = canvas_dim / 2;
 let tris_cell_dim = 100;
 var button;
 var reasoning = false;
-
+var flag = 0;
 
 
 function setup() {
@@ -21,17 +21,20 @@ function draw() {
   game.draw_grid();
   game.draw_state();
 
-
+  if (flag == 500){
+    print("STATO: ", game.state);
+    flag = 0;
+  }
+  else
+    flag ++;
   // if game is not in the final state
   if (game.final != 1) {
     // AI moves
-    if (game.state.player_turn == 'O') {
+    if (game.state.player_turn == 'O' ) {
 
-      if (reasoning == false){
-        reasoning = true;
-        var move = AI.nextMove(game);
-      }
-
+      move_AI = AI.nextMove(game);
+      //print("mossa scelta: ", move_AI);
+      //game.state = game.result(move_AI, 'O');
 
       /*// random choice
       actions = game.action(game.state);
@@ -57,17 +60,19 @@ function mouseClicked() {
   // - it's user turn
   // - game is not ended
   if (game.state.player_turn == 'X' && game.final != 1) {
+
     let boardX = canv_ctr - 150;
     let boardY = canv_ctr - 150;
     let row = game.cell_interpreter(mouseY, boardY);
     let col = game.cell_interpreter(mouseX, boardX);
     // if mouse position has been interpreted as in a cell
     if(row != null && col != null){
-      if (game.state.board[row][col] == 0) {
+      // se la cella è libera
+      if (game.state.board[row][col] == null) {
         // load the new state in the game
         game.state = game.result([row, col], game.state.player_turn);
         // change game player turn - form player to AI
-        if (game.check_final_state(game.state.board)) {
+        if (game.check_final_state(game.state)) {
           game.final = 1;
         }
       }
