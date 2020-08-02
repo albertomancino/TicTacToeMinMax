@@ -1,17 +1,21 @@
 class Tris {
 
-  constructor(canv_ctr, tris_cell_dim) {
+  constructor(canv_ctr, tris_cell_dim){
+
+    // random choice the first player
+    var rand = Math.floor(Math.random()*2);
+    var players = ['X','O'];
 
     this.state = {
       // default board is empty
       board:  [
-        [2, null, null],
+        [null, null, null],
         [null, null, null],
         [null, null, null]
       ],
 
       // first player is X by default
-      player_turn: 'X'
+      player_turn: players[rand]
     };
 
     this.canvas_dim = canvas_dim;
@@ -138,17 +142,20 @@ class Tris {
   }
 
   draw_solution(sol1, sol2) {
-    let x1 = sol1[1] * this.tris_cell_dim + this.tris_cell_dim / 2;
-    let y1 = sol1[0] * this.tris_cell_dim + this.tris_cell_dim / 2;
-    let x2 = sol2[1] * this.tris_cell_dim + this.tris_cell_dim / 2;
-    let y2 = sol2[0] * this.tris_cell_dim + this.tris_cell_dim / 2;
 
-    stroke('red');
-    strokeWeight(4);
-    line(x1, y1, x2, y2);
-    stroke(0);
-    strokeWeight(1);
+    if (sol1 !== null && sol2 != null){
 
+      let x1 = sol1[1] * this.tris_cell_dim + this.tris_cell_dim / 2;
+      let y1 = sol1[0] * this.tris_cell_dim + this.tris_cell_dim / 2;
+      let x2 = sol2[1] * this.tris_cell_dim + this.tris_cell_dim / 2;
+      let y2 = sol2[0] * this.tris_cell_dim + this.tris_cell_dim / 2;
+
+      stroke('red');
+      strokeWeight(4);
+      line(x1, y1, x2, y2);
+      stroke(0);
+      strokeWeight(1);
+    }
   }
 
   /*
@@ -162,23 +169,17 @@ class Tris {
      var board = state.board;
      // CHECK ROWS
      if (board[0][0] != null && board[0][0] == board[0][1] && board[0][1] == board[0][2]) {
-       //print("ROW1 WIN of", board[0][0]);
-       //print("VINCE", this.player_name(board[0][0]), "!");
        this.solution1 = [0, 0];
        this.solution2 = [0, 2];
 
        return board[0][0];
      }
      if (board[1][0] != null && board[1][0] == board[1][1] && board[1][1] == board[1][2]) {
-       //print("ROW2 WIN of", board[1][0]);
-       //print("VINCE", this.player_name(board[1][0]), "!");
        this.solution1 = [1, 0];
        this.solution2 = [1, 2];
        return board[1][0];
      }
      if (board[2][0] != null && board[2][0] == board[2][1] && board[2][1] == board[2][2]) {
-       //print("ROW3 WIN of", board[2][0]);
-       //print("VINCE", this.player_name(board[2][0]), "!");
        this.solution1 = [2, 0];
        this.solution2 = [2, 2];
        return board[2][0];
@@ -186,22 +187,16 @@ class Tris {
 
      // CHECK COLS
      if (board[0][0] != null && board[0][0] == board[1][0] && board[1][0] == board[2][0]) {
-       //print("COL1 WIN of", board[0][0]);
-       //print("VINCE", this.player_name(board[0][0]), "!");
        this.solution1 = [0, 0];
        this.solution2 = [2, 0];
        return board[0][0];
      }
      if (board[0][1] != null && board[0][1] == board[1][1] && board[1][1] == board[2][1]) {
-       //print("COL2 WIN of", board[0][1]);
-       //print("VINCE", this.player_name(board[0][1]), "!");
        this.solution1 = [0, 1];
        this.solution2 = [2, 1];
        return board[0][1];
      }
      if (board[0][2] != null && board[0][2] == board[1][2] && board[1][2] == board[2][2]) {
-       //print("COL3 WIN of", board[0][2]);
-       //print("VINCE", this.player_name(board[0][2]), "!");
        this.solution1 = [0, 2];
        this.solution2 = [2, 2];
        return board[0][2];
@@ -209,8 +204,6 @@ class Tris {
 
      // CHECK DIAG1
      if (board[0][0] != null && board[0][0] == board[1][1] && board[0][0] == board[2][2]) {
-       //print("DIAG1 WIN of", board[0][0]);
-       //print("VINCE", this.player_name(board[0][0]), "!");
        this.solution1 = [0, 0];
        this.solution2 = [2, 2];
        return board[0][0];
@@ -218,8 +211,6 @@ class Tris {
 
      // CHECK DIAG2
      if (board[0][2] != null && board[0][2] == board[1][1] && board[0][2] == board[2][0]) {
-       //print("DIAG2 WIN of", board[0][2]);
-       //print("VINCE", this.player_name(board[0][2]), "!");
        this.solution1 = [2, 0];
        this.solution2 = [0, 2];
        return board[0][2];
@@ -227,9 +218,14 @@ class Tris {
 
      let actions = this.action(state);
      if (actions.length == 0) {
-       print("PAREGGIO!");
+       this.solution1 = null;
+       this.solution2 = null;
        return -1;
      }
+
+     this.solution1 = null;
+     this.solution2 = null;
+
      return 0;
    }
 

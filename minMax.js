@@ -13,7 +13,6 @@ class MinMax {
     else
       this.depth = depth;
 
-
   }
 
   nextMove(agent){
