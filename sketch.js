@@ -34,7 +34,7 @@ function draw() {
 
       move_AI = AI.nextMove(game);
       //print("mossa scelta: ", move_AI);
-      //game.state = game.result(move_AI, 'O');
+      game.state = game.result(game.state, move_AI, 'O');
 
       /*// random choice
       actions = game.action(game.state);
@@ -70,8 +70,8 @@ function mouseClicked() {
       // se la cella è libera
       if (game.state.board[row][col] == null) {
         // load the new state in the game
-        game.state = game.result([row, col], game.state.player_turn);
-        // change game player turn - form player to AI
+        game.state = game.result(game.state, [row, col], game.state.player_turn);
+
         if (game.check_final_state(game.state)) {
           game.final = 1;
         }

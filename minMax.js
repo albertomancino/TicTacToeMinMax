@@ -1,10 +1,13 @@
 class MinMax {
 
   // depth argument refers to the tree search max depth
-  constructor(depth = null){
+  constructor(player, playerAI, depth = null){
     if (depth < 0) {
       console.log("Invalid depth for MinMax algorithm. Depth must be positive.\nMinMax - constructor")
       depth = null;
+
+      this.player = player;
+      this.AI = playerAI;
     }
     else
       this.depth = depth;
@@ -13,50 +16,82 @@ class MinMax {
   nextMove(agent){
     print("nextMove chiamata");
 
-    // all possibile actions
-    let fringe = agent.action(agent.state);
-    var move = this.min_max_search(agent, fringe);
+    var move = this.min_max_search(agent, agent.state);
 
-    return move;
+    return move[0];
   }
 
-  min_max_search(agent, fringe){
+  min_max_search(agent, state){
+
+    // all possible actions
+    var fringe = agent.action(state);
+
     print("-----------------------------------------------")
     print("Min Max Search. Fringe lenght: ", fringe.length);
-    print("Board pre min max search: ", agent.state.board[0],agent.state.board[1],agent.state.board[2]);
+    print("Mosse possibili: ", fringe);
+    print("!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    print("Stato attuale: ", state.board);
 
+    // move that will be chosen
     var bestMove = null;
+    var bestHeuristic = 0;
 
+    // compute for all possible actions in the fringe list
     fringe.forEach((move, i) => {
-      print("compute evolution with move ", move);
-      print("and turn: ", agent.state.player_turn);
-      print("and board: ", agent.state.board[0],agent.state.board[1],agent.state.board[2]);
-      // compute the evolution of the state
-      var childState = agent.result(move, agent.state.player_turn);
 
-      console.log("nuovo stato: ",move, "\n", childState.board[0],childState.board[1],childState.board[2]);
-      console.log("nuovo turno: ", childState.player_turn);
-      console.log("stato dell'agent: ",move, "\n", agent.state.board[0],agent.state.board[1],agent.state.board[2]);
+      var heuristic;
+
+      // compute the evolution of the state
+      var childState = agent.result(state, move, state.player_turn);
+
+      print('analizzo mossa: ', move, 'per il player:', state.player_turn);
+      print('nuovo stato: ', childState.board);
 
       // check if the new state is a final state
-      //if(agent.check_final_state(childState) != 0){
-        //var heuristic = agent.heuristic(childState,'O');
-        //print('Euristica: ', heuristic);
-      //}
-      // if is a final state compute heuristic
+      if(agent.check_final_state(childState) != 0){
 
+        // if is a final state compute heuristic
+        heuristic = agent.heuristic(childState);
+        print('Euristica: ', heuristic, 'con la mossa: ', move);
+        heuristic = 0;
+      }
       // if is not a final state continue exploring state space
+      else{
+        print("Devo ESPLORARE LO STATE SPACE PER VALUTARE lo stato: ", childState.board);
 
+        var search = this.min_max_search(agent, childState);
+        heuristic = search[1];
 
+        print("Dopo un lungo viggio lo stato ", childState.board, "ha euristica: ", heuristic);
+      }
 
+      // first move is always the best move
+      if (bestMove === null){
+        print("La prima mossa è la miglior mossa. Mossa: ", move);
+        bestMove = move;
+        bestHeuristic = heuristic;
+      }
 
-      //print("Iterazione: ", i);
-      //console.log("fringe: ", move);
+      // if player moves heuristic has to be MAXIMISED
+      if (state.player_turn == this.player){
+        if (bestHeuristic <= heuristic){
+          print("Principio di MASSIMIZZAZIONE. La nuova miglior mossa è: ", bestMove, "con euristica: ", heuristic);
+          bestMove = move;
+          bestHeuristic = heuristic;
+        }
+      }
+      // if AI moves heuristic has to be MINIMISED
+      else{
+        if (bestHeuristic >= heuristic){
+          print("Principio di MINIMIZZAZIONE. La nuova miglior mossa è: ", bestMove, "con euristica: ", heuristic);
 
-      bestMove = move;
+          bestMove = move;
+          bestHeuristic = heuristic;
+        }
+      }
     });
 
     console.log("ritornato: ", bestMove);
-    return bestMove;
+    return [bestMove, bestHeuristic];
   }
 }

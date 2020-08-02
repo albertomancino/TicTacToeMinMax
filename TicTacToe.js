@@ -6,8 +6,8 @@ class Tris {
       // default board is empty
       board:  [
         [1, null, null],
-        [null, 2, null],
-        [null, null, null]
+        [1, 2, 2],
+        [null, null, 2]
       ],
 
       // first player is X by default
@@ -99,19 +99,14 @@ class Tris {
     return actions;
   }
 
-  result(action, player) {
+  result(state, action, player) {
     let row = action[0];
     let col = action[1];
 
-    var newState = Object.assign({}, this.state);
-    //print("azione: ",action, " cella: ", newState.board[row][col]);
-    //print("Board pre azione: ", newState.board[0],newState.board[1],newState.board[2]);
-    //print("Turno pre azione: ", newState.player_turn);
-    newState.board[row][col] = this.player_id(player);
-    //print("Board post azione: ", newState.board[0],newState.board[1],newState.board[2]);
+    var newState = this.copyState(state);
 
+    newState.board[row][col] = this.player_id(player);
     this.change_turn(newState);
-    //print("Turno post azione: ", newState.player_turn);
 
     return newState;
   }
@@ -162,13 +157,13 @@ class Tris {
    * ritorna 2 se vince X
    * ritorna 3 se vince O
    */
-   check_final_state(state) {
+  check_final_state(state) {
      let check = 0;
      var board = state.board;
      // CHECK ROWS
      if (board[0][0] != null && board[0][0] == board[0][1] && board[0][1] == board[0][2]) {
        //print("ROW1 WIN of", board[0][0]);
-       print("VINCE", this.player_name(board[0][0]), "!");
+       //print("VINCE", this.player_name(board[0][0]), "!");
        this.solution1 = [0, 0];
        this.solution2 = [0, 2];
 
@@ -176,14 +171,14 @@ class Tris {
      }
      if (board[1][0] != null && board[1][0] == board[1][1] && board[1][1] == board[1][2]) {
        //print("ROW2 WIN of", board[1][0]);
-       print("VINCE", this.player_name(board[1][0]), "!");
+       //print("VINCE", this.player_name(board[1][0]), "!");
        this.solution1 = [1, 0];
        this.solution2 = [1, 2];
        return board[1][0];
      }
      if (board[2][0] != null && board[2][0] == board[2][1] && board[2][1] == board[2][2]) {
        //print("ROW3 WIN of", board[2][0]);
-       print("VINCE", this.player_name(board[2][0]), "!");
+       //print("VINCE", this.player_name(board[2][0]), "!");
        this.solution1 = [2, 0];
        this.solution2 = [2, 2];
        return board[2][0];
@@ -192,21 +187,21 @@ class Tris {
      // CHECK COLS
      if (board[0][0] != null && board[0][0] == board[1][0] && board[1][0] == board[2][0]) {
        //print("COL1 WIN of", board[0][0]);
-       print("VINCE", this.player_name(board[0][0]), "!");
+       //print("VINCE", this.player_name(board[0][0]), "!");
        this.solution1 = [0, 0];
        this.solution2 = [2, 0];
        return board[0][0];
      }
      if (board[0][1] != null && board[0][1] == board[1][1] && board[1][1] == board[2][1]) {
        //print("COL2 WIN of", board[0][1]);
-       print("VINCE", this.player_name(board[0][1]), "!");
+       //print("VINCE", this.player_name(board[0][1]), "!");
        this.solution1 = [0, 1];
        this.solution2 = [2, 1];
        return board[0][1];
      }
      if (board[0][2] != null && board[0][2] == board[1][2] && board[1][2] == board[2][2]) {
        //print("COL3 WIN of", board[0][2]);
-       print("VINCE", this.player_name(board[0][2]), "!");
+       //print("VINCE", this.player_name(board[0][2]), "!");
        this.solution1 = [0, 2];
        this.solution2 = [2, 2];
        return board[0][2];
@@ -215,7 +210,7 @@ class Tris {
      // CHECK DIAG1
      if (board[0][0] != null && board[0][0] == board[1][1] && board[0][0] == board[2][2]) {
        //print("DIAG1 WIN of", board[0][0]);
-       print("VINCE", this.player_name(board[0][0]), "!");
+       //print("VINCE", this.player_name(board[0][0]), "!");
        this.solution1 = [0, 0];
        this.solution2 = [2, 2];
        return board[0][0];
@@ -224,7 +219,7 @@ class Tris {
      // CHECK DIAG2
      if (board[0][2] != null && board[0][2] == board[1][1] && board[0][2] == board[2][0]) {
        //print("DIAG2 WIN of", board[0][2]);
-       print("VINCE", this.player_name(board[0][2]), "!");
+       //print("VINCE", this.player_name(board[0][2]), "!");
        this.solution1 = [2, 0];
        this.solution2 = [0, 2];
        return board[0][2];
@@ -233,7 +228,7 @@ class Tris {
      let actions = this.action(state);
      if (actions.length == 0) {
        print("PAREGGIO!");
-       return 1;
+       return -1;
      }
      return 0;
    }
@@ -244,22 +239,39 @@ class Tris {
   * -1 in caso di stato perdente
   * 0 altrimenti
   */
-  heuristic(state, player) {
+  heuristic(state) {
 
-    let state_value = check_final_state(state);
+    print("Calcolo euristica per lo stato: ", state.board, "con player: ", state.player_turn);
+
+    let state_value = this.check_final_state(state);
+    print("Risultato check final state: ", state_value);
     // pareggio o partita in corso
-    if (state_value == 0 || state_value == 1) {
+    if (state_value == 0 || state_value == -1) {
       return 0;
     }
-    // vittoria player
-    else if (state_value == player_id(player)) {
+    // vittoria X
+    else if (state_value == 1) {
       return 1;
     }
-    // vittoria player
+    // vittoria O
     else {
       return -1;
     }
-
   }
 
+  copyState(state){
+
+    var newState = {
+      board: [[null,null,null],[null,null,null],[null,null,null]],
+      player_turn: state.player_turn
+    }
+    // copying board value by value
+    for (var i = 0; i < 3; i++){
+      for (var j = 0; j < 3; j++){
+        newState.board[i][j] = state.board[i][j];
+      }
+    }
+
+    return newState;
+  }
 }

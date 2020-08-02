@@ -1,2 +1,5 @@
 capire perché result va ad influire sullo stato dell'agent quando
 ne effettua solo una copia per valore.
+
+Applicare il concetto di profondità e sostituire il calcolo dell'Euristica
+solo per stati che non sono finali
