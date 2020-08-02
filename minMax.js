@@ -2,15 +2,18 @@ class MinMax {
 
   // depth argument refers to the tree search max depth
   constructor(player, playerAI, depth = null){
+
+    this.player = player;
+    this.AI = playerAI;
+
     if (depth < 0) {
       console.log("Invalid depth for MinMax algorithm. Depth must be positive.\nMinMax - constructor")
       depth = null;
-
-      this.player = player;
-      this.AI = playerAI;
     }
     else
       this.depth = depth;
+
+
   }
 
   nextMove(agent){
@@ -53,7 +56,6 @@ class MinMax {
         // if is a final state compute heuristic
         heuristic = agent.heuristic(childState);
         print('Euristica: ', heuristic, 'con la mossa: ', move);
-        heuristic = 0;
       }
       // if is not a final state continue exploring state space
       else{
@@ -67,13 +69,16 @@ class MinMax {
 
       // first move is always the best move
       if (bestMove === null){
-        print("La prima mossa è la miglior mossa. Mossa: ", move);
+        print("La prima mossa è la miglior mossa. Mossa: ", move, "con euristica: ", heuristic);
         bestMove = move;
         bestHeuristic = heuristic;
       }
 
+      print("----> player che valuta la mossa: ", state.player_turn);
+      print("Il player è: ", this.player, "l'AI è: ", this.AI);
+
       // if player moves heuristic has to be MAXIMISED
-      if (state.player_turn == this.player){
+      if (state.player_turn === this.player){
         if (bestHeuristic <= heuristic){
           print("Principio di MASSIMIZZAZIONE. La nuova miglior mossa è: ", bestMove, "con euristica: ", heuristic);
           bestMove = move;

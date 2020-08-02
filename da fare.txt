@@ -3,3 +3,5 @@ ne effettua solo una copia per valore.
 
 Applicare il concetto di profondità e sostituire il calcolo dell'Euristica
 solo per stati che non sono finali
+
+Fare in modo che l'evoluzione della ricerca la si possa vedere visivamente

@@ -5,9 +5,9 @@ class Tris {
     this.state = {
       // default board is empty
       board:  [
-        [1, null, null],
-        [1, 2, 2],
-        [null, null, 2]
+        [2, null, null],
+        [null, null, null],
+        [null, null, null]
       ],
 
       // first player is X by default
@@ -22,8 +22,8 @@ class Tris {
     // final state, default is 0
     this.final = 0;
     // solution line coordinates
-    this.solution1 = 0;
-    this.solution2 = 0;
+    this.solution1 = null;
+    this.solution2 = null;
   }
 
   draw_grid() {
@@ -246,11 +246,11 @@ class Tris {
     let state_value = this.check_final_state(state);
     print("Risultato check final state: ", state_value);
     // pareggio o partita in corso
-    if (state_value == 0 || state_value == -1) {
+    if (state_value === 0 || state_value === -1) {
       return 0;
     }
     // vittoria X
-    else if (state_value == 1) {
+    else if (state_value === 1) {
       return 1;
     }
     // vittoria O
