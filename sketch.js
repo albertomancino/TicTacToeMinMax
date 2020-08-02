@@ -33,10 +33,14 @@ function draw() {
       move_AI = AI.nextMove(game);
       game.state = game.result(game.state, move_AI, 'O');
 
-      /*// random choice
+      /*
+      // random choice
       actions = game.action(game.state);
       let move = Math.floor(Math.random() * actions.length);
-      game.result(actions[move], game.player_turn);*/
+      move_AI = actions[move];
+      game.state = game.result(game.state, move_AI, 'O');
+      */
+
     }
   }
   // game ended
