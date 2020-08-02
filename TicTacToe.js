@@ -241,10 +241,7 @@ class Tris {
   */
   heuristic(state) {
 
-    print("Calcolo euristica per lo stato: ", state.board, "con player: ", state.player_turn);
-
     let state_value = this.check_final_state(state);
-    print("Risultato check final state: ", state_value);
     // pareggio o partita in corso
     if (state_value === 0 || state_value === -1) {
       return 0;
