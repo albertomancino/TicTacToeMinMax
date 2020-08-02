@@ -7,6 +7,7 @@ var reasoning = false;
 
 
 function setup() {
+
   var canvas = createCanvas(canvas_dim, canvas_dim);
   // link canvas to an element in the page as its child
   canvas.parent("canvas_container")
@@ -16,6 +17,7 @@ function setup() {
 }
 
 function draw() {
+
   background(220);
   game.draw_grid();
   game.draw_state();
@@ -40,7 +42,6 @@ function draw() {
       move_AI = actions[move];
       game.state = game.result(game.state, move_AI, 'O');
       */
-
     }
   }
   // game ended
@@ -49,6 +50,7 @@ function draw() {
   }
 
 }
+
 // function called when the mouse is pressed
 function mouseClicked() {
   // mouse click must be considered only under specific conditions:

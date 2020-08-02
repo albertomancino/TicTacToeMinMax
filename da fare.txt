@@ -5,3 +5,9 @@ Applicare il concetto di profondità e sostituire il calcolo dell'Euristica
 solo per stati che non sono finali
 
 Fare in modo che l'evoluzione della ricerca la si possa vedere visivamente
+
+
+SECOND VERSION
+
+Primo obiettivo: in caso di più soluzioni corrette scegliere una randomicamente
+Secondo obiettivo: applicare il concetto di depth nella ricerca
