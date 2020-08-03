@@ -64,37 +64,32 @@ class MinMax {
 
       // if player moves heuristic has to be MAXIMISED
       if (state.player_turn === this.player){
-        if (bestHeuristic <= heuristic){
 
-          bestMove = move;
-          bestHeuristic = heuristic;
-
-        }
         if (bestHeuristic < heuristic){
           bestMoves = [move];
+          bestHeuristic = heuristic;
         }
-        else if(bestHeuristic === heuristic){
+        else if(bestHeuristic === heuristic)
           bestMoves.push(move);
-        }
       }
       // if AI moves heuristic has to be MINIMISED
       else{
-        if (bestHeuristic >= heuristic){
 
-          bestMove = move;
-          bestHeuristic = heuristic;
-        }
         if (bestHeuristic > heuristic){
           bestMoves = [move];
+          bestHeuristic = heuristic;
         }
-        else if(bestHeuristic === heuristic){
+        else if(bestHeuristic === heuristic)
           bestMoves.push(move);
-        }
       }
     });
 
     //print("le mosse migliori sono: ", bestMoves);
     //print("la mossa scelta è: ", bestMove);
+
+    // choose the best move between equivalent best moves
+    var bestMove_index = Math.floor(Math.random() * bestMoves.length);
+    bestMove = bestMoves[bestMove_index];
 
     return [bestMove, bestHeuristic];
   }

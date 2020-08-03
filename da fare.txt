@@ -9,5 +9,7 @@ Fare in modo che l'evoluzione della ricerca la si possa vedere visivamente
 
 SECOND VERSION
 
-Primo obiettivo: in caso di più soluzioni corrette scegliere una randomicamente
-Secondo obiettivo: applicare il concetto di depth nella ricerca
+Primo obiettivo: in caso di più soluzioni corrette scegliere una randomicamente (FATTO)
+Secondo obiettivo: applicare il concetto di depth nella ricerca (FATTO)
+Terzo obiettivo: inserire il contributo della depth nel calcolo dell'euristica (FATTO)
+Quarto obiettivo: aggiungere pulsanti per la scelta della difficoltà
