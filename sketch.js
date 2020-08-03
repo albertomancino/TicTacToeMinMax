@@ -13,7 +13,7 @@ function setup() {
   canvas.parent("canvas_container")
   game = new Tris(canvas_dim, tris_cell_dim);
   translate(100, 100);
-  AI = new MinMax('X','O');
+  AI = new MinMax('X','O', 1);
 }
 
 function draw() {

@@ -17,12 +17,12 @@ class MinMax {
 
   nextMove(agent){
 
-    var move = this.min_max_search(agent, agent.state, this.depth);
+    var move = this.min_max_search(agent, agent.state, this.depth, 0);
 
     return move[0];
   }
 
-  min_max_search(agent, state, depth){
+  min_max_search(agent, state, max_depth, depth){
 
     // all possible actions
     var fringe = agent.action(state);
@@ -41,16 +41,17 @@ class MinMax {
       // compute the evolution of the state
       var childState = agent.result(state, move, state.player_turn);
 
+
       // check if the new state is a final state
-      if(agent.check_final_state(childState) != 0 || depth == 0){
+      if(agent.check_final_state(childState) != 0 || depth === max_depth){
 
         // if is a final state compute heuristic
-        heuristic = agent.heuristic(childState);
+        heuristic = agent.heuristic(childState, depth);
       }
       // if is not a final state continue exploring state space
       else{
-
-        var search = this.min_max_search(agent, childState, depth--);
+        var new_depth = depth + 1;
+        var search = this.min_max_search(agent, childState, max_depth, new_depth);
         heuristic = search[1];
       }
 
@@ -67,6 +68,13 @@ class MinMax {
 
           bestMove = move;
           bestHeuristic = heuristic;
+
+        }
+        if (bestHeuristic < heuristic){
+          bestMoves = [move];
+        }
+        else if(bestHeuristic === heuristic){
+          bestMoves.push(move);
         }
       }
       // if AI moves heuristic has to be MINIMISED
@@ -76,8 +84,17 @@ class MinMax {
           bestMove = move;
           bestHeuristic = heuristic;
         }
+        if (bestHeuristic > heuristic){
+          bestMoves = [move];
+        }
+        else if(bestHeuristic === heuristic){
+          bestMoves.push(move);
+        }
       }
     });
+
+    //print("le mosse migliori sono: ", bestMoves);
+    //print("la mossa scelta è: ", bestMove);
 
     return [bestMove, bestHeuristic];
   }

@@ -235,7 +235,10 @@ class Tris {
   * -1 in caso di stato perdente
   * 0 altrimenti
   */
-  heuristic(state) {
+  heuristic(state, depth = 0) {
+
+    // search depth can influence the heuristic
+    var depth_coefficient = 9 - depth;
 
     let state_value = this.check_final_state(state);
     // pareggio o partita in corso
@@ -244,11 +247,11 @@ class Tris {
     }
     // vittoria X
     else if (state_value === 1) {
-      return 1;
+      return 1*depth_coefficient;
     }
     // vittoria O
     else {
-      return -1;
+      return -1*depth_coefficient;
     }
   }
 
